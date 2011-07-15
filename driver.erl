@@ -15,8 +15,10 @@
         {name, process, score=0, history=[]}).
 
 create_players() ->
-    Players = [ {"pushover", pushover},
-                {"psycho", psycho}
+    Players = [ {"pcavs", pcavs},
+                {"pushover", pushover},
+                {"psycho", psycho},
+                {"titfortat", titfortat}
                 ],
     lists:map(fun({Name, Module}) ->
                       #player{name=Name,
@@ -27,7 +29,7 @@ create_players() ->
 %% Run a tournament among a list of { Name, Module } pairs, print the
 %% results out.
 run_tournament() ->
-    N = 10,
+    N = 200,
     Players = create_players(),
     AllPairs = all_pairs(Players),
     AllScores = lists:map(

@@ -1,10 +1,10 @@
-%%% Paul Cavallaro's Erlang module to participate in the Prisoner's Dilemma
-%%% tournament.
+%%% Paul Cavallaro's Tit for Tat Erlang module to participate in the Prisoner's
+%%% Dilemma tournament.
 %%%
-%%% Little bit of a mess to follow, but it should defect proportionally often
-%%% as its opponent has defected no matter this bots decision
+%%% Little bit of a mess to follow, but it should retaliate quickly and
+%%% forgive fast.
 
--module(pcavs).
+-module(titfortat).
 -export([init/0, play/2, result/2, stop/1]).
 
 init() ->
@@ -26,10 +26,15 @@ choose(N, Probability, _State) when N > Probability ->
 result({_Opponent, _OwnChoice, _OpponentChoice}, _State) ->
     dict:store(_Opponent, calculate(_OpponentChoice, dict:fetch(_Opponent, _State)), _State).
 
+%%% When I'm not about to fall asleep, I should look into if there's a more
+%%% idiomatic way to do this with map and destructuring
 calculate(cooperate, {_OpponentCooperations, _OpponentDefects, _TotalGames}) ->
-    {_OpponentCooperations + 1, _OpponentDefects, _TotalGames + 1};
+    {decay(_OpponentCooperations) + 1, decay(_OpponentDefects), decay(_TotalGames) + 1};
 calculate(defect, {_OpponentCooperations, _OpponentDefects, _TotalGames}) ->
-    {_OpponentCooperations, _OpponentDefects + 1, _TotalGames + 1}.
+    {decay(_OpponentCooperations),decay(_OpponentDefects) + 1, decay(_TotalGames) + 1}.
+
+decay(N) ->
+    N * math:pow(2, -2).
 
 stop(_State) ->
     ok.
