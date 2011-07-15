@@ -15,7 +15,8 @@
         {name, process, score=0, history=[]}).
 
 create_players() ->
-    Players = [ {"pushover", pushover},
+    Players = [ {"pcavs", pcavs},
+                {"pushover", pushover},
                 {"psycho", psycho}
                 ],
     lists:map(fun({Name, Module}) ->
